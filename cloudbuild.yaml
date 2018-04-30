@@ -2,5 +2,5 @@ steps:
 - name: 'gcr.io/cloud-builders/gradle'
   args: ['build', 'gemFile']
 - name: 'ruby:2.4'
-  args: ['gem', 'build', '*.gemspec']
+  args: ['gem', 'build', 'protobuf-management.gemspec']
   dir: 'build/src/generated/main/ruby'
