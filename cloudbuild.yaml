@@ -1,6 +1,6 @@
 steps:
 - name: 'gcr.io/cloud-builders/gradle'
   args: ['build', 'gemFile']
-- name: 'hub.docker.io/ruby:2.4'
+- name: 'ruby:2.4'
   args: ['gem', 'build', '*.gemspec']
   dir: 'build/src/generated/main/ruby'
