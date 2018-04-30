@@ -1,0 +1,101 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.+'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.google.protobuf'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+protobuf {
+    // Configure the protoc executable
+    protoc {
+        // Download from repositories
+        artifact = 'com.google.protobuf:protoc:3.0.+'
+    }
+
+    plugins {
+        // Define a plugin with name 'grpc'
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.11.+'
+        }
+    }
+    generateProtoTasks {
+        ofSourceSet('main')*.builtins {
+            //go {}
+            python {}
+            ruby {
+                outputSubDir = 'ruby/lib'
+            }
+        }
+        ofSourceSet('main')*.plugins {
+            // Apply the "grpc" plugin whose spec is defined above, without
+            // options.  Note the braces cannot be omitted, otherwise the
+            // plugin will not be added. This is because of the implicit way
+            // NamedDomainObjectContainer binds the methods.
+            grpc {}
+        }
+    }
+    generatedFilesBaseDir = "$projectDir/build/src/generated"
+}
+
+sourceSets {
+    main {
+        proto {
+            // In addition to the default 'src/main/proto'
+            srcDir 'src/proto'
+        }
+    }
+    test {
+        proto {
+            // In addition to the default 'src/test/proto'
+            srcDir 'test/proto'
+        }
+    }
+}
+
+version = '1.0.0'
+
+dependencies {
+    //protobuf 'com.google.api.grpc:proto-google-common-protos:1.10.+'
+    compile 'com.google.protobuf:protobuf-java:3.5.+'
+    compile 'io.grpc:grpc-all:1.11.+'
+}
+
+task gemFile() {
+    dependsOn 'generateProto'
+    doLast {
+        new File("${protobuf.generatedFilesBaseDir}/main/ruby/${project.name}.gemspec").text = """
+Gem::Specification.new do |s|
+  s.name        = '${project.name}'
+  s.version     = '$version'
+  s.date        = '2010-04-28'
+  s.summary     = "Hola!"
+  s.description = "A simple hello world gem"
+  s.authors     = ["Nick Quaranto"]
+  s.email       = 'nick@quaran.to'
+  s.files      += Dir.glob("lib/**/*")
+  s.homepage    =
+    'http://rubygems.org/gems/hola'
+  s.license       = 'MIT'
+  s.required_ruby_version = '>= 2.4.0'
+end
+"""
+    }
+}
+task gem(type: Exec) {
+    dependsOn gemFile
+    workingDir "${protobuf.generatedFilesBaseDir}/main/ruby"
+    executable '/usr/local/bin/gem'
+    args "build", "${project.name}.gemspec"
+}

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+//import "model/hello.proto";
+import "google/protobuf/empty.proto";
+
+service HelloWorld {
+    rpc Hello(HelloRequest) returns (HelloResponse);
+}
+
+message HelloRequest {}
+message HelloResponse {}
