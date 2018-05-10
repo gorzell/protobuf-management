@@ -1,6 +1,6 @@
 steps:
 - name: 'chaossystems/prototool:master'
-  args: ['lint', '/workspace/src/proto']
+  args: ['lint', 'src/main/proto']
   waitFor: ['-']
 - name: 'gcr.io/cloud-builders/gradle'
   args: ['build', 'gemFile']

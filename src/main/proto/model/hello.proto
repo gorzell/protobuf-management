@@ -1,5 +1,10 @@
 syntax = "proto3";
 
+option go_package = "io.chaossystems.protobuf.management";
+option java_package = "io.chaossystems.protobuf.management";
+
+package model;
+
 message Hello {
     string uuid = 1;
     int32 message = 2;

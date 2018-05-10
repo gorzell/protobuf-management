@@ -1,0 +1,6 @@
+lint:
+  # run "prototool list-linters" to see the currently configured linters
+  # add "exclude_ids" to ignore specific linter IDs for all files
+  exclude_ids:
+    - FILE_OPTIONS_EQUAL_GO_PACKAGE_PB_SUFFIX
+    - FILE_OPTIONS_EQUAL_JAVA_PACKAGE_COM_PB
