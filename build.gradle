@@ -46,22 +46,7 @@ protobuf {
             grpc {}
         }
     }
-    generatedFilesBaseDir = "$projectDir/build/src/generated"
-}
-
-sourceSets {
-    main {
-        proto {
-            // In addition to the default 'src/main/proto'
-            srcDir 'src/proto'
-        }
-    }
-    test {
-        proto {
-            // In addition to the default 'src/test/proto'
-            srcDir 'test/proto'
-        }
-    }
+    //generatedFilesBaseDir = "$projectDir/build/src/generated"
 }
 
 version = '1.0.0'
