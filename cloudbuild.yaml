@@ -7,4 +7,4 @@ steps:
   waitFor: ['-']
 - name: 'ruby:2.4'
   args: ['gem', 'build', 'protobuf-management.gemspec']
-  dir: 'build/src/generated/main/ruby'
+  dir: 'build/generated/source/proto/main/ruby'
