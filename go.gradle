@@ -1,0 +1,37 @@
+dependencies {
+    golang {
+        build 'github.com/golang/protobuf/proto'
+        build 'github.com/golang/protobuf/protoc-gen-go'
+        build 'google.golang.org/grpc'
+    }
+}
+
+golang {
+
+    // Import path of package to be built
+    packagePath = 'github.com/gorzell/protobuf-management'
+
+    // The buid mode. There are two alternatives: DEVELOP/REPRODUCIBLE, REPRODUCIBLE by default
+    // This configuration will be overwritten by command line argument -Dgogradle.mode
+    // REP/DEV for abbreviation
+    buildMode = 'REPRODUCIBLE'
+
+    // The Go version to use. See https://golang.org/dl/
+    // If not specified, Gogradle will find local go process. If not found, the latest version will be downloaded and installed automatically
+    // If specified, Gogradle will check if local go version matches the specific version. If not, the specific version will be downloaded and installed automatcally
+    goVersion = '1.9.1'
+
+    // Default value is "go". Modify this when go is not in $PATH
+    // You can use goExecutable = 'IGNORE_LOCAL' to ignore local go forcibly
+//    goExecutable = '/path/to/go/executable'
+
+    // For custom distribution repository. Gogradle will try to download go distributions from
+    // http://golangtc.com/static/go/${version}/go${version}.${os}-${arch}${extension}
+//    goBinaryDownloadTemplate == 'http://golangtc.com/static/go/${version}/go${version}.${os}-${arch}${extension}'
+
+    // If not set, GOROOT will be <directory of go binary>/..
+//    goRoot = '/path/to/my/goroot'
+
+    // aka. build constraint. See https://golang.org/pkg/go/build/#hdr-Build_Constraints
+//    buildTags = ['appengine','anothertag']
+}

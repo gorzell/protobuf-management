@@ -1,20 +1,32 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.+'
-    }
+plugins {
+    id 'java'
+    id "com.google.protobuf" version "0.8.5"
+    id "com.jetbrains.ruby.envs" version "0.0.4"
+
+//    id "com.jetbrains.python.envs" version "0.0.25"
+//    id 'com.linkedin.python' version "0.7.16"
+//    id 'com.linkedin.python-sdist' version "0.7.16"
+
+//    id 'com.github.blindpirate.gogradle' version '0.9'
 }
 
-apply plugin: 'java'
-apply plugin: 'com.google.protobuf'
+apply from: 'ruby.gradle'
+apply from: 'go.gradle'
+//apply from: 'python.gradle'
+
+repositories {
+    mavenCentral()
+}
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-repositories {
-    mavenCentral()
+version = '1.0.0'
+
+dependencies {
+    //protobuf 'com.google.api.grpc:proto-google-common-protos:1.10.+'
+    compile 'com.google.protobuf:protobuf-java:3.5.+'
+    compile 'io.grpc:grpc-all:1.11.+'
 }
 
 protobuf {
@@ -25,6 +37,9 @@ protobuf {
     }
 
     plugins {
+        go {
+            path = "${System.getProperty('user.home')}/go/bin/protoc-gen-go"
+        }
         // Define a plugin with name 'grpc'
         grpc {
             artifact = 'io.grpc:protoc-gen-grpc-java:1.11.+'
@@ -32,7 +47,6 @@ protobuf {
     }
     generateProtoTasks {
         ofSourceSet('main')*.builtins {
-            //go {}
             python {}
             ruby {
                 outputSubDir = 'ruby/lib'
@@ -44,43 +58,22 @@ protobuf {
             // plugin will not be added. This is because of the implicit way
             // NamedDomainObjectContainer binds the methods.
             grpc {}
+            go {
+                options.add('plugins=grpc')
+            }
         }
     }
     //generatedFilesBaseDir = "$projectDir/build/src/generated"
 }
 
-version = '1.0.0'
-
-dependencies {
-    //protobuf 'com.google.api.grpc:proto-google-common-protos:1.10.+'
-    compile 'com.google.protobuf:protobuf-java:3.5.+'
-    compile 'io.grpc:grpc-all:1.11.+'
+task sourceJar(type: Jar) {
+    destinationDir project.distsDir
+    from(sourceSets.main.proto)
 }
 
-task gemFile() {
-    dependsOn 'generateProto'
-    doLast {
-        new File("${protobuf.generatedFilesBaseDir}/main/ruby/${project.name}.gemspec").text = """
-Gem::Specification.new do |s|
-  s.name        = '${project.name}'
-  s.version     = '$version'
-  s.date        = '2010-04-28'
-  s.summary     = "Hola!"
-  s.description = "A simple hello world gem"
-  s.authors     = ["Nick Quaranto"]
-  s.email       = 'nick@quaran.to'
-  s.files      += Dir.glob("lib/**/*")
-  s.homepage    =
-    'http://rubygems.org/gems/hola'
-  s.license       = 'MIT'
-  s.required_ruby_version = '>= 2.4.0'
-end
-"""
-    }
-}
-task gem(type: Exec) {
-    dependsOn gemFile
-    workingDir "${protobuf.generatedFilesBaseDir}/main/ruby"
-    executable '/usr/local/bin/gem'
-    args "build", "${project.name}.gemspec"
+task sourceTar(type: Tar) {
+    baseName project.archivesBaseName
+    destinationDir project.distsDir
+    compression Compression.GZIP
+    from(sourceSets.main.proto)
 }

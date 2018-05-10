@@ -1,0 +1,38 @@
+envs {
+    bootstrapDirectory = new File(buildDir, 'bootstrap')
+    envsDirectory = new File(buildDir, 'envs')
+
+    //ruby "2.4.4", "rvm"
+    ruby "2.4.4", "rbenv"
+}
+
+
+task gemFile() {
+    dependsOn 'generateProto'
+    doLast {
+        new File("${protobuf.generatedFilesBaseDir}/main/ruby/${project.name}.gemspec").text = """
+Gem::Specification.new do |s|
+  s.name        = '${project.name}'
+  s.version     = '$version'
+  s.date        = '2010-04-28'
+  s.summary     = "Hola!"
+  s.description = "A simple hello world gem"
+  s.authors     = ["Nick Quaranto"]
+  s.email       = 'nick@quaran.to'
+  s.files      += Dir.glob("lib/**/*")
+  s.homepage    =
+    'http://rubygems.org/gems/hola'
+  s.license       = 'MIT'
+  s.required_ruby_version = '>= 2.4.0'
+end
+"""
+    }
+}
+task gem(type: Exec) {
+    dependsOn gemFile
+    dependsOn 'build_rubies'
+    workingDir "${protobuf.generatedFilesBaseDir}/main/ruby"
+    executable "${envs.rubies.head().dir}/bin/gem"
+    //executable '/usr/local/bin/gem'
+    args "build", "${project.name}.gemspec"
+}
