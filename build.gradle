@@ -11,7 +11,7 @@ plugins {
 }
 
 apply from: 'ruby.gradle'
-apply from: 'go.gradle'
+//apply from: 'go.gradle'
 //apply from: 'python.gradle'
 
 repositories {
