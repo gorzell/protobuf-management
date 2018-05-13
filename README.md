@@ -18,21 +18,22 @@ I started with a simple set of requirements that I drew from what I considered p
 
 ## Approach
 
-1. Store and manage the `proto` files in their own repository so that you can treat them as you would any other library and they can be easily consumed by multiple other projects
-2. Generate the source code for each desired language as part of a CI process in that repo.
-3. Build all the way to a standard artifact for that language.
-4. Test against the artifacts as much as possible in the CI process.
-5. Publish artifacts for each language in their "standard" way, including the proto files themselves.
-6. Dependencies should consume the artifacts rather than the `proto` files themselves.
+1. Store and manage the `proto` files in their own module/directory/repository so that you can treat them as you would any other library and they can be easily consumed by multiple other projects
+1. Generate the source code for each desired language as part of a CI process in that repo.
+1. Lint and test the `proto` files to the extent possible.
+1. Build all the way to a standard artifact for that language.
+1. Test against the artifacts as much as possible in the CI process.
+1. Publish artifacts for each language in their "standard" way, including the proto files themselves (in tar/zip files).
+1. Dependent projects should consume the artifacts rather than the repository or code.  If you need depend on and include the `proto` files in other protobuf projects, these can also consume artifact bundles.
 
 ## Implementation
 **Prototype**
 
-I have put together a prototype version of the above process in this repo.  It leverages gradle to do the proto build because it seemed to have the richest set of features for both generating src across multiple languages and compiling and packaging the `java` artifacts.  It also supports downloading artifacts with protofiles in them and using them as dependencies, which is pretty nice.
+I have put together a prototype version of the above process in this repo.  It leverages gradle to do the proto build because it seemed to have the richest set of features for both generating src across multiple languages and compiling and packaging the `java` artifacts.  It also supports downloading artifacts with `proto` files in them and using them as dependencies, which is pretty nice.
 
-Currently there is a slightly modified directory structure that removes an extra level that is normally included by gradle, I am not sure if that is worth while in the long run, but it does show that the gradle build can be configured to have a source and build directory structure that makes sense of your project.
+Currently this is just using the default gradle directory layout, however the gradle build can be configured to have a source and build directory structure that makes sense of your project.
 
-The prototype generates and packages code in both `java` JAR files and `ruby` gem files.  It generates the gemspec on the fly, but has to delegate the gem file creating to a native ruby install, it might make more sense to use rbenv or something similar for a production version.
+The prototype generates and packages code in both `java` JAR files and `ruby` gem files.  It generates the gemspec on the fly, and uses rbenv to load a sandboxed copy of the appropriate ruby version.
 
 Finally, there is a Google Container Builder config file that will build, lint and package everything up.  Eventually this can be extended to also publish the results.
 
