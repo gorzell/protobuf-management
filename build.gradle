@@ -1,13 +1,13 @@
 plugins {
     id 'java'
-    id "com.google.protobuf" version "0.8.5"
+    id "com.google.protobuf" version "0.8.6"
     id "com.jetbrains.ruby.envs" version "0.0.4"
 
 //    id "com.jetbrains.python.envs" version "0.0.25"
 //    id 'com.linkedin.python' version "0.7.16"
 //    id 'com.linkedin.python-sdist' version "0.7.16"
 
-//    id 'com.github.blindpirate.gogradle' version '0.9'
+//    id 'com.github.blindpirate.gogradle' version '0.10'
 }
 
 apply from: 'ruby.gradle'
@@ -21,19 +21,19 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-version = '1.0.0'
+version '1.0.0'
 
 dependencies {
     //protobuf 'com.google.api.grpc:proto-google-common-protos:1.10.+'
-    compile 'com.google.protobuf:protobuf-java:3.5.+'
-    compile 'io.grpc:grpc-all:1.11.+'
+    compile 'com.google.protobuf:protobuf-java:3.6.+'
+    compile 'io.grpc:grpc-all:1.14.+'
 }
 
 protobuf {
     // Configure the protoc executable
     protoc {
         // Download from repositories
-        artifact = 'com.google.protobuf:protoc:3.0.+'
+        artifact = 'com.google.protobuf:protoc:3.6.+'
     }
 
     plugins {
@@ -77,3 +77,6 @@ task sourceTar(type: Tar) {
     compression Compression.GZIP
     from(sourceSets.main.proto)
 }
+
+assemble.dependsOn sourceJar
+assemble.dependsOn sourceTar
