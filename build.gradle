@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "maven-publish"
     id "com.google.protobuf" version "0.8.6"
     id "com.jetbrains.ruby.envs" version "0.0.4"
 
@@ -66,12 +67,28 @@ protobuf {
     //generatedFilesBaseDir = "$projectDir/build/src/generated"
 }
 
-task sourceJar(type: Jar) {
-    destinationDir project.distsDir
-    from(sourceSets.main.proto)
+publishing {
+    publications {
+        PubProto(MavenPublication) {
+            from components.java
+            artifact sourceJar
+            artifact protoJar
+            artifact protoTar
+        }
+    }
 }
 
-task sourceTar(type: Tar) {
+task sourceJar(type: Jar) {
+    classifier = "sources"
+    from sourceSets.main.allJava
+}
+
+task protoJar(type: Jar){
+    classifier = "protos"
+    from sourceSets.main.proto
+}
+
+task protoTar(type: Tar) {
     baseName project.archivesBaseName
     destinationDir project.distsDir
     compression Compression.GZIP
@@ -79,4 +96,5 @@ task sourceTar(type: Tar) {
 }
 
 assemble.dependsOn sourceJar
-assemble.dependsOn sourceTar
+assemble.dependsOn protoJar
+assemble.dependsOn protoTar
