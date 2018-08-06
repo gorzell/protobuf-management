@@ -36,6 +36,9 @@ The prototype generates and packages code in both `java` JAR files and `ruby` ge
 
 Finally, there is a Google Container Builder config file that will build, lint and package everything up.  Eventually this can be extended to also publish the results.
 
+## Dependencies
+* [prototool](https://github.com/uber/prototool)
+* [protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
 
 ## Future Features
 * More variables to control things like the version, artifact names, etc for the gradle build.
@@ -46,6 +49,8 @@ Finally, there is a Google Container Builder config file that will build, lint a
 ## Related Projects
 * [prototool](https://github.com/uber/prototool)
   * This may be a useful tool for generating sources and some testing, but doesn't handle the packaging and publishing aspects of things.
+* [protoc-gen-lint](https://github.com/ckaznocha/protoc-gen-lint)
+* [protobuf-gradle-plugin](https://github.com/google/protobuf-gradle-plugin)
 
 ## Footnotes
 \[1\] [How We Build gRPC Services At Namely](https://medium.com/namely-labs/how-we-build-grpc-services-at-namely-52a3ae9e7c35)  
