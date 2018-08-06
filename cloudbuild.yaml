@@ -1,10 +1,10 @@
 steps:
 - name: 'chaossystems/prototool:master'
-  args: ['lint', '/workspace/src/proto']
+  args: ['lint', 'src/main/proto']
   waitFor: ['-']
 - name: 'gcr.io/cloud-builders/gradle'
   args: ['build', 'gemFile']
   waitFor: ['-']
 - name: 'ruby:2.4'
   args: ['gem', 'build', 'protobuf-management.gemspec']
-  dir: 'build/src/generated/main/ruby'
+  dir: 'build/generated/source/proto/main/ruby'

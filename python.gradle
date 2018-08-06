@@ -1,0 +1,14 @@
+
+python {
+    srcDir = project.file('src').path // The location of this project's source directory.
+    setupCfg = project.file('src').path // The location of this project's setup.cfg file.
+//    pythonEnvironment = [:] // Environment variables that will be passed to python commands. This will overwrite any existing env variables.
+//    pipConfig = [:] // A Map of Maps to build a pip configuration file in your venv
+
+    details {
+        virtualEnvPrompt = "(${project.name})"
+//        activateLink = project.file("activate") // File you can source to activate the virtual env
+        // pythonVersion = '2.6' // Sets the version of python to use, will search your PATH to get the location
+        // systemPythonInterpreter = file("/path/to/python2.7") // used to force an interpreter to be used to build the venv
+    }
+}

@@ -9,5 +9,8 @@ compile:
 build:
 	./gradlew build
 
+package:
+	./gradlew build gem
+
 lint:
-	docker run --rm -v $(shell pwd):/workspace:ro chaossystems/prototool:master lint /workspace/src/proto
+	docker run --rm -v $(shell pwd):/workspace:ro -w /workspace chaossystems/prototool:master lint src/main/proto

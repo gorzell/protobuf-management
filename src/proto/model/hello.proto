@@ -1,6 +1,0 @@
-syntax = "proto3";
-
-message Hello {
-    string uuid = 1;
-    int32 message = 2;
-}

@@ -1,5 +1,10 @@
 syntax = "proto3";
 
+option go_package = "github.com/gorzell/protobuf-management";
+option java_package = "io.chaossystems.protobuf.management.grpc";
+
+package grpc;
+
 //import "model/hello.proto";
 //import "google/protobuf/empty.proto";
 
