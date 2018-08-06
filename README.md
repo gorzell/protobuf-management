@@ -1,16 +1,17 @@
 # Protocol Buffer (and gRPC) Management
 
-This is a proposed set of guidelines, practices and tooling for managing `proto` files, as well as the creation and distribution of artifacts across multiple languages. 
+This is a proposed set of guidelines, practices and tooling for managing `proto` files, as well as the creation and distribution of artifacts created from them across multiple languages. 
 
 ## Why?
-I work at a large organization that has multiple groups moving towards using both protobufs and gRPC.  When I looked at how different groups were integrating these things into they workflow and how they were being consumed, there did not seem to be a consistent solution.  Some teams were simply vendoring an upstream repo and generating the sources themselves, others had built some custom tooling to help their consumers (in a subset of possible languages) integrate their schemas.  Neither of these solutions really felt optimal to me and not having a consistent solution did not feel particularly scalable.
+I work at a large organization that has multiple groups moving towards using both protobufs and gRPC.  When I looked at how different groups were integrating these things into they workflow and how they were being consumed, there did not seem to be a consistent solution.  Some teams were simply vendoring an upstream repo and generating sources for their language themselves, others had built some custom tooling to help their consumers (in a subset of possible languages) integrate their schemas.  Neither of these solutions really felt optimal to me and not having a consistent solution did not feel particularly scalable.
  
- Instead, it seemed like there should be consistent practices, tooling and automation around managing both the definitions and the artifacts that they produce would be extremely valuable.  With the popularity of both of these libraries, I assumed that there must be some well documented best practices that already existed.  However, when I started looking for prior art about how other companies manage these things I only found one blog post\[1\] and one git repo\[2\] that seemed applicable.  I was really hoping to find some industry best practices that we could simply adopt.  However when that did not work out I decided that I should just write one down and prototype it.
+ Instead, it seemed like there should be a set of consistent practices, tooling and automation for managing both the definitions and the artifacts that they produce.  With the popularity of both `protobuf` and `gRPC`, I assumed that there must be some well documented best practices that already existed.  However, when I started looking for prior art about how other companies manage these things I only found one blog post\[1\] and one git repo\[2\] that seemed applicable.  I was really hoping to find some industry best practices that we could simply adopt.  However when that did not work out I decided that I should just write a proposal down and prototype it.
 
 ## Requirements
 I started with a simple set of requirements that I drew from what I considered pretty standard best practices in software development:
 
 * Semantic Versioning
+  * This gets a bit tricky because of the nature/backwards compatibility of protobufs, but still seems worthwhile.
 * CI Builds
 * CI Testing
 * Publishing Artifacts
@@ -18,13 +19,13 @@ I started with a simple set of requirements that I drew from what I considered p
 
 ## Approach
 
-1. Store and manage the `proto` files in their own module/directory/repository so that you can treat them as you would any other library and they can be easily consumed by multiple other projects
+1. Store and manage the `proto` files in their own module/directory/repository so that you can treat them as you would any other library and they can be easily consumed by multiple other projects.
 1. Generate the source code for each desired language as part of a CI process in that repo.
 1. Lint and test the `proto` files to the extent possible.
 1. Build all the way to a standard artifact for that language.
 1. Test against the artifacts as much as possible in the CI process.
 1. Publish artifacts for each language in their "standard" way, including the proto files themselves (in tar/zip files).
-1. Dependent projects should consume the artifacts rather than the repository or code.  If you need depend on and include the `proto` files in other protobuf projects, these can also consume artifact bundles.
+1. Dependent projects should consume the artifacts rather than the repository or code.  Even if you need depend on and include the `proto` files in other protobuf projects, you should be able to [consume artifact bundles](https://github.com/google/protobuf-gradle-plugin#protos-in-dependencies).
 
 ## Implementation
 **Prototype**
